@@ -1,0 +1,23 @@
+@use '../../../styles/variables' as *;
+
+.select {
+  padding: $spacing-xs $spacing-sm;
+  background: $color-bg-tertiary;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-text;
+  font-family: $font-family;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color $transition;
+
+  &:focus {
+    border-color: $color-accent;
+  }
+
+  option {
+    background: $color-bg-secondary;
+    color: $color-text;
+  }
+}

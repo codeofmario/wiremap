@@ -1,0 +1,35 @@
+@use '../../../styles/variables' as *;
+
+.key-value {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  font-family: $font-family;
+  font-size: 13px;
+
+  &__item {
+    display: grid;
+    grid-template-columns: minmax(120px, auto) 1fr;
+    gap: $spacing-md;
+    padding: $spacing-sm $spacing-md;
+    border-bottom: 1px solid $color-border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__label {
+    color: $color-text-secondary;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  &__value {
+    color: $color-text;
+    margin: 0;
+    word-break: break-word;
+  }
+}

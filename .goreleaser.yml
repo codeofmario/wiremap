@@ -1,0 +1,18 @@
+builds:
+  - main: ./cmd/wiremap
+    binary: wiremap
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w
+
+archives:
+  - format: tar.gz
+    name_template: "wiremap_{{ .Os }}_{{ .Arch }}"
+
+release:
+  github:
+    owner: codeofmario
+    name: wiremap

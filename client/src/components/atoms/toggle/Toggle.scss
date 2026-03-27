@@ -1,0 +1,37 @@
+@use '../../../styles/variables' as *;
+
+.toggle {
+  display: inline-flex;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  &__option {
+    padding: $spacing-xs $spacing-sm;
+    background: transparent;
+    border: none;
+    color: $color-text-secondary;
+    font-family: $font-family;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all $transition;
+
+    &:not(:last-child) {
+      border-right: 1px solid $color-border;
+    }
+
+    &:hover {
+      color: $color-text;
+      background: $color-bg-tertiary;
+    }
+
+    &--active {
+      color: white;
+      background: $color-accent;
+
+      &:hover {
+        background: $color-accent;
+      }
+    }
+  }
+}

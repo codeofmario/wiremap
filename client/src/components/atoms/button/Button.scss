@@ -1,0 +1,54 @@
+@use 'sass:color';
+@use '../../../styles/variables' as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  font-family: $font-family;
+  cursor: pointer;
+  transition: all $transition;
+  white-space: nowrap;
+
+  &--sm {
+    padding: $spacing-xs $spacing-sm;
+    font-size: 12px;
+  }
+
+  &--md {
+    padding: $spacing-sm $spacing-md;
+    font-size: 13px;
+  }
+
+  &--primary {
+    background: $color-accent;
+    border-color: $color-accent;
+    color: white;
+
+    &:hover {
+      background: $color-accent-hover;
+    }
+  }
+
+  &--secondary {
+    background: $color-bg-tertiary;
+    color: $color-text;
+
+    &:hover {
+      background: color.adjust($color-bg-tertiary, $lightness: 5%);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    border-color: transparent;
+    color: $color-text-secondary;
+
+    &:hover {
+      color: $color-text;
+      background: $color-bg-tertiary;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+@use '../../../styles/variables' as *;
+
+.stack {
+  display: flex;
+
+  &--dir-column { flex-direction: column; }
+  &--dir-row { flex-direction: row; }
+
+  &--gap-none { gap: 0; }
+  &--gap-xs { gap: $spacing-xs; }
+  &--gap-sm { gap: $spacing-sm; }
+  &--gap-md { gap: $spacing-md; }
+  &--gap-lg { gap: $spacing-lg; }
+  &--gap-xl { gap: $spacing-xl; }
+
+  &--pad-none { padding: 0; }
+  &--pad-xs { padding: $spacing-xs; }
+  &--pad-sm { padding: $spacing-sm; }
+  &--pad-md { padding: $spacing-md; }
+  &--pad-lg { padding: $spacing-lg; }
+
+  &--full-height { height: 100%; }
+
+  &--clickable { cursor: pointer; }
+
+  &--overflow-hidden { overflow: hidden; min-width: 0; max-width: 100%; }
+  &--overflow-auto { overflow: auto; min-width: 0; max-width: 100%; }
+}

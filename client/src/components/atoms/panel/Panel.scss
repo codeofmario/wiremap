@@ -1,0 +1,29 @@
+@use '../../../styles/variables' as *;
+
+.panel {
+  &--default {
+    background: $color-bg-secondary;
+  }
+
+  &--bordered {
+    background: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+  }
+
+  &--elevated {
+    background: $color-bg-secondary;
+    border-left: 1px solid $color-border;
+  }
+
+  &--pad-none { padding: 0; }
+  &--pad-sm { padding: $spacing-sm; }
+  &--pad-md { padding: $spacing-md; }
+  &--pad-lg { padding: $spacing-lg; }
+
+  &--overflow-hidden { overflow: hidden; }
+  &--overflow-auto { overflow: auto; }
+  &--overflow-visible { overflow: visible; }
+
+  &--full-height { height: 100%; }
+}

@@ -1,0 +1,37 @@
+@use '../../../styles/variables' as *;
+
+.input {
+  width: 100%;
+  padding: $spacing-xs $spacing-sm;
+  background: $color-bg-tertiary;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  color: $color-text;
+  outline: none;
+  transition: border-color $transition;
+
+  &::placeholder {
+    color: $color-text-secondary;
+  }
+
+  &:focus {
+    border-color: $color-accent;
+  }
+
+  &--default {
+    font-family: $font-family;
+  }
+
+  &--mono {
+    font-family: $font-mono;
+  }
+
+  &--sm {
+    font-size: 12px;
+    padding: 2px $spacing-xs;
+  }
+
+  &--md {
+    font-size: 13px;
+  }
+}

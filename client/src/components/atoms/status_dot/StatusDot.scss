@@ -1,0 +1,22 @@
+@use '../../../styles/variables' as *;
+
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &--running {
+    background: $color-success;
+    box-shadow: 0 0 6px rgba($color-success, 0.5);
+  }
+
+  &--stopped {
+    background: $color-error;
+  }
+
+  &--other {
+    background: $color-warning;
+  }
+}

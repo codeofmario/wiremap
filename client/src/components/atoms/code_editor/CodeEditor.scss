@@ -1,0 +1,29 @@
+@use '../../../styles/variables' as *;
+
+.code-editor {
+  width: 100%;
+  height: 100%;
+  background: $color-bg;
+  border-radius: $radius-md;
+  overflow: hidden;
+
+  .cm-editor {
+    height: 100%;
+    font-family: $font-mono;
+    font-size: 13px;
+
+    &.cm-focused {
+      outline: none;
+    }
+  }
+
+  .cm-scroller {
+    overflow: auto;
+  }
+
+  .cm-gutters {
+    background: $color-bg-secondary;
+    border-right: 1px solid $color-border;
+    color: $color-text-secondary;
+  }
+}

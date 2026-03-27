@@ -1,0 +1,35 @@
+@use '../../../styles/variables' as *;
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: $font-family;
+  font-size: 13px;
+  color: $color-text;
+
+  &__head {
+    background: $color-bg-secondary;
+  }
+
+  &__th {
+    padding: $spacing-sm $spacing-md;
+    text-align: left;
+    font-weight: 600;
+    color: $color-text-secondary;
+    border-bottom: 1px solid $color-border;
+    white-space: nowrap;
+  }
+
+  &__row {
+    transition: background $transition;
+
+    &:hover {
+      background: $color-bg-tertiary;
+    }
+  }
+
+  &__td {
+    padding: $spacing-sm $spacing-md;
+    border-bottom: 1px solid $color-border;
+  }
+}

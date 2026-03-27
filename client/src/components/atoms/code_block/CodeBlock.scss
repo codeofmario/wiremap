@@ -1,0 +1,18 @@
+@use '../../../styles/variables' as *;
+
+.code-block {
+  margin: 0;
+  padding: $spacing-md;
+  background: $color-bg;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  overflow: auto;
+
+  &__code {
+    font-family: $font-mono;
+    font-size: 13px;
+    line-height: 1.6;
+    color: $color-text;
+    white-space: pre;
+  }
+}

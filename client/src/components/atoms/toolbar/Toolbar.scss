@@ -1,0 +1,18 @@
+@use '../../../styles/variables' as *;
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  flex-shrink: 0;
+
+  &--bordered {
+    border-bottom: 1px solid $color-border;
+  }
+
+  &--justify-start { justify-content: flex-start; }
+  &--justify-end { justify-content: flex-end; }
+  &--justify-between { justify-content: space-between; }
+  &--justify-center { justify-content: center; }
+}
