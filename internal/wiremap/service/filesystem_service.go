@@ -11,7 +11,7 @@ import (
 	"github.com/codeofmario/wiremap/internal/wiremap/docker"
 	"github.com/codeofmario/wiremap/internal/wiremap/dto"
 	apperrors "github.com/codeofmario/wiremap/internal/wiremap/errors"
-	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
 )
 
 type FilesystemService interface {
@@ -34,7 +34,7 @@ func (s *filesystemService) execCmd(ctx context.Context, hostID string, containe
 		return nil, err
 	}
 
-	exec, err := c.ContainerExecCreate(ctx, containerID, types.ExecConfig{
+	exec, err := c.ContainerExecCreate(ctx, containerID, container.ExecOptions{
 		Cmd:          cmd,
 		AttachStdout: true,
 		AttachStderr: true,
@@ -43,7 +43,7 @@ func (s *filesystemService) execCmd(ctx context.Context, hostID string, containe
 		return nil, err
 	}
 
-	resp, err := c.ContainerExecAttach(ctx, exec.ID, types.ExecStartCheck{})
+	resp, err := c.ContainerExecAttach(ctx, exec.ID, container.ExecStartOptions{})
 	if err != nil {
 		return nil, err
 	}
@@ -157,7 +157,7 @@ func (s *filesystemService) WriteFile(ctx context.Context, hostID string, contai
 		return err
 	}
 
-	exec, err := c.ContainerExecCreate(ctx, containerID, types.ExecConfig{
+	exec, err := c.ContainerExecCreate(ctx, containerID, container.ExecOptions{
 		Cmd:         []string{"tee", path},
 		AttachStdin: true,
 	})
@@ -165,7 +165,7 @@ func (s *filesystemService) WriteFile(ctx context.Context, hostID string, contai
 		return apperrors.Internal(fmt.Sprintf("failed to create exec for write: %s", err))
 	}
 
-	resp, err := c.ContainerExecAttach(ctx, exec.ID, types.ExecStartCheck{})
+	resp, err := c.ContainerExecAttach(ctx, exec.ID, container.ExecStartOptions{})
 	if err != nil {
 		return apperrors.Internal(fmt.Sprintf("failed to attach exec for write: %s", err))
 	}

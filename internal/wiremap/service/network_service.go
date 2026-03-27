@@ -7,7 +7,7 @@ import (
 	"github.com/codeofmario/wiremap/internal/wiremap/docker"
 	"github.com/codeofmario/wiremap/internal/wiremap/dto"
 	apperrors "github.com/codeofmario/wiremap/internal/wiremap/errors"
-	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/network"
 	"github.com/docker/docker/client"
 )
 
@@ -30,7 +30,7 @@ func (s *networkService) List(ctx context.Context, hostID string) ([]dto.Network
 		return nil, err
 	}
 
-	networks, err := c.NetworkList(ctx, types.NetworkListOptions{})
+	networks, err := c.NetworkList(ctx, network.ListOptions{})
 	if err != nil {
 		return nil, apperrors.Internal(fmt.Sprintf("failed to list networks: %s", err))
 	}
@@ -38,7 +38,7 @@ func (s *networkService) List(ctx context.Context, hostID string) ([]dto.Network
 	result := make([]dto.NetworkDto, 0, len(networks))
 	for _, n := range networks {
 		// NetworkList doesn't populate Containers, so inspect each
-		inspected, err := c.NetworkInspect(ctx, n.ID, types.NetworkInspectOptions{})
+		inspected, err := c.NetworkInspect(ctx, n.ID, network.InspectOptions{})
 		if err != nil {
 			result = append(result, s.toDto(n))
 			continue
@@ -55,7 +55,7 @@ func (s *networkService) Inspect(ctx context.Context, hostID string, id string) 
 		return nil, err
 	}
 
-	n, err := c.NetworkInspect(ctx, id, types.NetworkInspectOptions{})
+	n, err := c.NetworkInspect(ctx, id, network.InspectOptions{})
 	if err != nil {
 		if client.IsErrNotFound(err) {
 			return nil, apperrors.NotFound(fmt.Sprintf("network %s not found", id))
@@ -67,7 +67,7 @@ func (s *networkService) Inspect(ctx context.Context, hostID string, id string) 
 	return &result, nil
 }
 
-func (s *networkService) toDto(n types.NetworkResource) dto.NetworkDto {
+func (s *networkService) toDto(n network.Inspect) dto.NetworkDto {
 	d := dto.NetworkDto{
 		ID:     n.ID,
 		Name:   n.Name,

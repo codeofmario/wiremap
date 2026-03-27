@@ -12,7 +12,6 @@ import (
 	"github.com/codeofmario/wiremap/internal/wiremap/docker"
 	"github.com/codeofmario/wiremap/internal/wiremap/dto"
 	apperrors "github.com/codeofmario/wiremap/internal/wiremap/errors"
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 )
@@ -212,7 +211,7 @@ func (s *containerService) Stats(ctx context.Context, hostID string, id string) 
 }
 
 func (s *containerService) ParseStats(raw json.RawMessage) (*dto.StatsDto, error) {
-	var stats types.StatsJSON
+	var stats container.StatsResponse
 	if err := json.Unmarshal(raw, &stats); err != nil {
 		return nil, err
 	}
@@ -263,7 +262,7 @@ func (s *containerService) Exec(ctx context.Context, hostID string, id string, c
 		cmd = []string{"/bin/sh"}
 	}
 
-	execConfig := types.ExecConfig{
+	execConfig := container.ExecOptions{
 		Cmd:          cmd,
 		AttachStdin:  true,
 		AttachStdout: true,
@@ -276,7 +275,7 @@ func (s *containerService) Exec(ctx context.Context, hostID string, id string, c
 		return nil, apperrors.Internal(fmt.Sprintf("failed to create exec: %s", err))
 	}
 
-	resp, err := c.ContainerExecAttach(ctx, exec.ID, types.ExecStartCheck{Tty: true})
+	resp, err := c.ContainerExecAttach(ctx, exec.ID, container.ExecStartOptions{Tty: true})
 	if err != nil {
 		return nil, apperrors.Internal(fmt.Sprintf("failed to attach exec: %s", err))
 	}
@@ -290,7 +289,7 @@ func (s *containerService) ExecResize(ctx context.Context, hostID string, execID
 		return err
 	}
 
-	return c.ContainerExecResize(ctx, execID, types.ResizeOptions{
+	return c.ContainerExecResize(ctx, execID, container.ResizeOptions{
 		Height: height,
 		Width:  width,
 	})
