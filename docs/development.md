@@ -16,7 +16,7 @@ make install   # Install Go and npm dependencies
 make dev       # Start backend (air) + frontend (Vite)
 ```
 
-- **Backend** runs on [http://localhost:8080](http://localhost:8080) with hot reload via `air`
+- **Backend** runs on [http://localhost:7070](http://localhost:7070) with hot reload via `air`
 - **Frontend** runs on [http://localhost:5173](http://localhost:5173) with HMR via Vite
 - In dev mode, the backend proxies frontend requests to the Vite dev server
 

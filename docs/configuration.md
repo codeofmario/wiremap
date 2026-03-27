@@ -89,7 +89,7 @@ Configuration is resolved in this order (first match wins):
 
 | Flag | Short | Default | Description |
 |------|-------|---------|-------------|
-| `--port` | `-p` | `8080` | Port to listen on |
+| `--port` | `-p` | `7070` | Port to listen on |
 | `--host` | | | Docker host URL (can be repeated) |
 | `--config` | | | Path to config YAML file |
 | `--dev` | | `false` | Dev mode: proxy frontend requests to Vite at `:5173` |
@@ -110,7 +110,7 @@ When running Wiremap in Docker, mount the Docker socket read-only:
 
 ```bash
 docker run -d \
-  -p 8080:8080 \
+  -p 7070:7070 \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   codeofmario/wiremap
 ```
@@ -119,7 +119,7 @@ To connect to remote hosts from a Docker container, mount your config and TLS ce
 
 ```bash
 docker run -d \
-  -p 8080:8080 \
+  -p 7070:7070 \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   -v ./wiremap.yml:/etc/wiremap/wiremap.yml:ro \
   -v ./certs:/certs:ro \

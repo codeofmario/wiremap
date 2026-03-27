@@ -22,5 +22,5 @@ RUN apk add --no-cache ca-certificates && \
     adduser -D -u 1000 -G wiremap wiremap
 COPY --from=backend /app/wiremap /usr/local/bin/wiremap
 USER wiremap
-EXPOSE 8080
+EXPOSE 7070
 ENTRYPOINT ["wiremap"]

@@ -25,7 +25,7 @@ curl -sSL https://raw.githubusercontent.com/codeofmario/wiremap/main/install.sh 
 
 ```bash
 docker run -d \
-  -p 8080:8080 \
+  -p 7070:7070 \
   -v /var/run/docker.sock:/var/run/docker.sock:ro \
   codeofmario/wiremap
 ```
@@ -37,7 +37,7 @@ services:
   wiremap:
     image: codeofmario/wiremap
     ports:
-      - "8080:8080"
+      - "7070:7070"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped
@@ -52,7 +52,7 @@ make build
 ./bin/wiremap
 ```
 
-Open [http://localhost:8080](http://localhost:8080).
+Open [http://localhost:7070](http://localhost:7070).
 
 ## Features
 
@@ -72,7 +72,7 @@ Open [http://localhost:8080](http://localhost:8080).
 ## Usage
 
 ```bash
-# Default: local Docker socket on port 8080
+# Default: local Docker socket on port 7070
 wiremap
 
 # Custom port
@@ -87,7 +87,7 @@ wiremap --config wiremap.yml
 
 | Flag | Short | Default | Description |
 |------|-------|---------|-------------|
-| `--port` | `-p` | `8080` | Port to listen on |
+| `--port` | `-p` | `7070` | Port to listen on |
 | `--host` | | | Docker host URL (repeatable) |
 | `--config` | | | Path to `wiremap.yml` config file |
 | `--dev` | | `false` | Dev mode (proxy frontend to Vite) |

@@ -2,7 +2,7 @@ services:
   wiremap:
     build: .
     ports:
-      - "8080:8080"
+      - "7070:7070"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     restart: unless-stopped

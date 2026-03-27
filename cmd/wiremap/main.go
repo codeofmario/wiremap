@@ -22,7 +22,7 @@ func main() {
 		RunE:  run,
 	}
 
-	rootCmd.Flags().IntVarP(&port, "port", "p", 8080, "port to listen on")
+	rootCmd.Flags().IntVarP(&port, "port", "p", 7070, "port to listen on")
 	rootCmd.Flags().BoolVar(&devMode, "dev", false, "enable dev mode (proxy frontend to vite dev server)")
 	rootCmd.Flags().StringVar(&configFile, "config", "", "path to wiremap.yml config file")
 	rootCmd.Flags().StringSliceVar(&hosts, "host", nil, "Docker host URLs (can be repeated)")

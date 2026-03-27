@@ -22,7 +22,12 @@ func NewApp(router *gin.Engine, settings *config.Settings) *App {
 
 func (a *App) Run() error {
 	addr := fmt.Sprintf(":%d", a.settings.Port)
-	log.Printf("Wiremap listening on http://localhost%s", addr)
+	url := fmt.Sprintf("http://localhost:%d", a.settings.Port)
+
+	fmt.Println()
+	fmt.Println("  Wiremap is running!")
+	fmt.Printf("  Open in browser: %s\n", url)
+	fmt.Println()
 
 	if a.settings.DevMode {
 		log.Printf("Dev mode enabled — frontend proxied to http://localhost:5173")
