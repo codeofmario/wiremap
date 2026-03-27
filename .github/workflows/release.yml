@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Wire code
         run: |
-          go install github.com/google/wire/cmd/wire@v0.6.0
+          go install github.com/google/wire/cmd/wire@v0.7.0
           cd cmd/wiremap
           wire
 

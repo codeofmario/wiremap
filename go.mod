@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/docker/docker v25.0.6+incompatible
 	github.com/gin-gonic/gin v1.12.0
-	github.com/google/wire v0.6.0
+	github.com/google/wire v0.7.0
 	github.com/gorilla/websocket v1.5.3
 	github.com/spf13/cobra v1.8.1
 	gopkg.in/yaml.v3 v3.0.1
