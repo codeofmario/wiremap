@@ -12,7 +12,7 @@ case "$ARCH" in
   *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
 esac
 
-LATEST=$(curl -sI "https://github.com/$REPO/releases/latest" | grep -i location | sed 's/.*tag\///' | tr -d '\r')
+LATEST=$(curl -sL -o /dev/null -w '%{url_effective}' "https://github.com/$REPO/releases/latest" | sed 's|.*/tag/||')
 if [ -z "$LATEST" ]; then
   echo "Error: failed to fetch latest release version"; exit 1
 fi
