@@ -14,6 +14,7 @@ import (
 	"sync"
 
 	"github.com/codeofmario/wiremap/internal/wiremap/config"
+	apperrors "github.com/codeofmario/wiremap/internal/wiremap/errors"
 	"github.com/docker/docker/client"
 )
 
@@ -29,13 +30,23 @@ func NewClientPool(settings *config.Settings) (*ClientPool, error) {
 		hosts:   settings.Hosts,
 	}
 
+	var connected, failed []string
 	for _, host := range settings.Hosts {
 		c, err := createClient(host)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "warning: failed to create client for host %s: %v\n", host.Name, err)
+			failed = append(failed, fmt.Sprintf("%s (%s): %v", host.Name, host.URL, err))
 			continue
 		}
 		pool.clients[host.Name] = c
+		connected = append(connected, fmt.Sprintf("%s (%s)", host.Name, host.URL))
+	}
+
+	fmt.Fprintln(os.Stderr, "Docker host registry:")
+	for _, h := range connected {
+		fmt.Fprintf(os.Stderr, "  ✓ connected: %s\n", h)
+	}
+	for _, h := range failed {
+		fmt.Fprintf(os.Stderr, "  ✗ failed:    %s\n", h)
 	}
 
 	if len(pool.clients) == 0 {
@@ -53,11 +64,16 @@ func (p *ClientPool) Get(hostID string) (*client.Client, error) {
 		hostID = p.hosts[0].Name
 	}
 
-	c, ok := p.clients[hostID]
-	if !ok {
-		return nil, fmt.Errorf("host %q not found or not connected", hostID)
+	if c, ok := p.clients[hostID]; ok {
+		return c, nil
 	}
-	return c, nil
+
+	for _, h := range p.hosts {
+		if h.Name == hostID {
+			return nil, apperrors.NotFound(fmt.Sprintf("host %q is configured but failed to connect at startup — check server logs", hostID))
+		}
+	}
+	return nil, apperrors.NotFound(fmt.Sprintf("host %q is not configured", hostID))
 }
 
 func (p *ClientPool) Hosts() []config.HostConfig {
