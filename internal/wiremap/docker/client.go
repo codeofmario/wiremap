@@ -1,17 +1,20 @@
 package docker
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"crypto/x509"
+	"errors"
 	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"os"
-	"time"
 	"os/exec"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/codeofmario/wiremap/internal/wiremap/config"
 	apperrors "github.com/codeofmario/wiremap/internal/wiremap/errors"
@@ -37,6 +40,16 @@ func NewClientPool(settings *config.Settings) (*ClientPool, error) {
 			failed = append(failed, fmt.Sprintf("%s (%s): %v", host.Name, host.URL, err))
 			continue
 		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), 8*time.Second)
+		_, pingErr := c.Ping(ctx)
+		cancel()
+		if pingErr != nil {
+			failed = append(failed, fmt.Sprintf("%s (%s): %v", host.Name, host.URL, pingErr))
+			c.Close()
+			continue
+		}
+
 		pool.clients[host.Name] = c
 		connected = append(connected, fmt.Sprintf("%s (%s)", host.Name, host.URL))
 	}
@@ -143,11 +156,11 @@ func sshHTTPClient(sshURL string) *http.Client {
 }
 
 func sshDialStdio(ctx context.Context, sshTarget string) (net.Conn, error) {
-	// Try docker system dial-stdio first, fall back to socat
 	cmd := exec.CommandContext(ctx,
 		"ssh",
 		"-o", "StrictHostKeyChecking=no",
 		"-o", "ConnectTimeout=10",
+		"-o", "BatchMode=yes",
 		sshTarget,
 		"docker", "system", "dial-stdio",
 	)
@@ -162,6 +175,13 @@ func sshDialStdio(ctx context.Context, sshTarget string) (net.Conn, error) {
 		return nil, fmt.Errorf("ssh stdout pipe: %w", err)
 	}
 
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return nil, fmt.Errorf("ssh stderr pipe: %w", err)
+	}
+	stderrBuf := &bytes.Buffer{}
+	go io.Copy(stderrBuf, stderr)
+
 	if err := cmd.Start(); err != nil {
 		return nil, fmt.Errorf("ssh start: %w", err)
 	}
@@ -170,6 +190,7 @@ func sshDialStdio(ctx context.Context, sshTarget string) (net.Conn, error) {
 		cmd:    cmd,
 		reader: stdout,
 		writer: stdin,
+		stderr: stderrBuf,
 	}, nil
 }
 
@@ -180,9 +201,22 @@ type sshConn struct {
 		Write([]byte) (int, error)
 		Close() error
 	}
+	stderr *bytes.Buffer
 }
 
-func (c *sshConn) Read(b []byte) (int, error)  { return c.reader.Read(b) }
+func (c *sshConn) Read(b []byte) (int, error) {
+	n, err := c.reader.Read(b)
+	if errors.Is(err, io.EOF) {
+		// ssh exited; drain stderr and surface its message instead of bare EOF
+		_ = c.cmd.Wait()
+		if c.cmd.ProcessState != nil && !c.cmd.ProcessState.Success() {
+			if msg := strings.TrimSpace(c.stderr.String()); msg != "" {
+				return n, fmt.Errorf("ssh: %s", msg)
+			}
+		}
+	}
+	return n, err
+}
 func (c *sshConn) Write(b []byte) (int, error) { return c.writer.Write(b) }
 func (c *sshConn) Close() error {
 	c.writer.Close()
