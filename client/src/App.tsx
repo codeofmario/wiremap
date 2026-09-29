@@ -1,5 +1,5 @@
-import { Dashboard } from './components/pages/dashboard/Dashboard';
+import { Workspace } from './components/pages/workspace/Workspace';
 
 export const App = () => {
-  return <Dashboard />;
+  return <Workspace />;
 };

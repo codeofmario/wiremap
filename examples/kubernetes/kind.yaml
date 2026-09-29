@@ -1,0 +1,8 @@
+# Local 3-node cluster for trying Wiremap's Kubernetes view.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: wiremap-demo
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker

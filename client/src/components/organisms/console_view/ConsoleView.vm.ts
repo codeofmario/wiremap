@@ -3,12 +3,12 @@ import { Terminal } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 
 export interface ConsoleViewProps {
-  host: string;
-  containerId: string;
+  /** WebSocket path of the exec endpoint, e.g. `/ws/exec/<id>?host=local` */
+  execPath: string;
   className?: string;
 }
 
-export const useConsoleView = ({ host, containerId }: ConsoleViewProps) => {
+export const useConsoleView = ({ execPath }: ConsoleViewProps) => {
   const termRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<Terminal | null>(null);
   const wsRef = useRef<WebSocket | null>(null);
@@ -53,14 +53,14 @@ export const useConsoleView = ({ host, containerId }: ConsoleViewProps) => {
       fitRef.current = fit;
 
       const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const hostParam = host ? `?host=${encodeURIComponent(host)}` : '';
-      const ws = new WebSocket(`${protocol}//${location.host}/ws/exec/${containerId}${hostParam}`);
+      const ws = new WebSocket(`${protocol}//${location.host}${execPath}`);
       ws.binaryType = 'arraybuffer';
       wsRef.current = ws;
 
       ws.onopen = () => {
         terminal.writeln('\x1b[32mConnected to container shell\x1b[0m\r\n');
         fit.fit();
+        ws.send(JSON.stringify({ event: 'resize', cols: terminal.cols, rows: terminal.rows }));
       };
 
       ws.onmessage = (event) => {
@@ -105,7 +105,7 @@ export const useConsoleView = ({ host, containerId }: ConsoleViewProps) => {
       terminalRef.current?.dispose();
       terminalRef.current = null;
     };
-  }, [containerId]);
+  }, [execPath]);
 
   return { termRef };
 };

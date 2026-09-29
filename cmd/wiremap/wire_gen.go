@@ -10,27 +10,50 @@ import (
 	"github.com/codeofmario/wiremap/internal/wiremap/config"
 	"github.com/codeofmario/wiremap/internal/wiremap/docker"
 	"github.com/codeofmario/wiremap/internal/wiremap/handler"
+	"github.com/codeofmario/wiremap/internal/wiremap/kube"
 	"github.com/codeofmario/wiremap/internal/wiremap/router"
 	"github.com/codeofmario/wiremap/internal/wiremap/service"
 	"github.com/codeofmario/wiremap/internal/wiremap/ws"
+	"github.com/google/wire"
 )
 
 // Injectors from wire.go:
 
-func InitializeApp(port2 int, devMode2 bool, configFile2 string, hosts2 []string) (*App, error) {
-	settings := config.NewSettings(port2, devMode2, configFile2, hosts2)
-	clientPool, err := docker.NewClientPool(settings)
-	if err != nil {
-		return nil, err
-	}
+func InitializeApp(flags2 config.Flags) (*App, error) {
+	settings := config.NewSettings(flags2)
+	clientPool := docker.NewClientPool(settings)
 	containerService := service.NewContainerService(clientPool)
 	containerHandler := handler.NewContainerHandler(containerService)
 	networkService := service.NewNetworkService(clientPool)
 	networkHandler := handler.NewNetworkHandler(networkService)
 	filesystemService := service.NewFilesystemService(clientPool)
 	filesystemHandler := handler.NewFilesystemHandler(filesystemService)
+	clusterPool := kube.NewClusterPool(settings)
+	kubeClusterService := service.NewKubeClusterService(clusterPool)
+	kubeTopologyService := service.NewKubeTopologyService(clusterPool)
+	kubeClusterHandler := handler.NewKubeClusterHandler(kubeClusterService, kubeTopologyService)
+	kubeResourceService := service.NewKubeResourceService(clusterPool)
+	kubeResourceHandler := handler.NewKubeResourceHandler(kubeResourceService)
+	kubePodService := service.NewKubePodService(clusterPool)
+	kubePodHandler := handler.NewKubePodHandler(kubePodService)
+	kubeBrowserService := service.NewKubeBrowserService(clusterPool)
+	kubeBrowserHandler := handler.NewKubeBrowserHandler(kubeBrowserService)
+	kubeActionService := service.NewKubeActionService(clusterPool)
+	kubeNodeActionService := service.NewKubeNodeActionService(clusterPool)
+	kubeActionHandler := handler.NewKubeActionHandler(kubeActionService, kubeNodeActionService)
 	hub := ws.NewHub(containerService, settings)
-	engine := router.InitRoutes(settings, clientPool, containerHandler, networkHandler, filesystemHandler, hub)
-	app := NewApp(engine, settings)
+	kubeWatchService := service.NewKubeWatchService(clusterPool)
+	kubeHub := ws.NewKubeHub(kubePodService, kubeWatchService, settings)
+	engine := router.InitRoutes(settings, clientPool, containerHandler, networkHandler, filesystemHandler, kubeClusterHandler, kubeResourceHandler, kubePodHandler, kubeBrowserHandler, kubeActionHandler, hub, kubeHub)
+	app, err := NewApp(engine, settings, clientPool, clusterPool)
+	if err != nil {
+		return nil, err
+	}
 	return app, nil
 }
+
+// wire.go:
+
+var dockerSet = wire.NewSet(docker.NewClientPool, service.NewContainerService, service.NewNetworkService, service.NewFilesystemService, handler.NewContainerHandler, handler.NewNetworkHandler, handler.NewFilesystemHandler, ws.NewHub)
+
+var kubeSet = wire.NewSet(kube.NewClusterPool, service.NewKubeClusterService, service.NewKubeTopologyService, service.NewKubeResourceService, service.NewKubePodService, service.NewKubeBrowserService, service.NewKubeActionService, service.NewKubeNodeActionService, service.NewKubeWatchService, handler.NewKubeClusterHandler, handler.NewKubeResourceHandler, handler.NewKubePodHandler, handler.NewKubeBrowserHandler, handler.NewKubeActionHandler, ws.NewKubeHub)

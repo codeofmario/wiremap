@@ -3,11 +3,13 @@ import { ContainerStats } from '../../../types/docker';
 export interface StatsChartProps {
   current: ContainerStats | null;
   history: ContainerStats[];
+  /** Kubernetes metrics-server reports no network counters */
+  showNetwork?: boolean;
   className?: string;
 }
 
-export const useStatsChart = ({ current, history }: StatsChartProps) => {
-  return { current, history };
+export const useStatsChart = ({ current, history, showNetwork = true }: StatsChartProps) => {
+  return { current, history, showNetwork };
 };
 
 export const formatBytes = (bytes: number): string => {

@@ -19,4 +19,8 @@
   &--other {
     background: $color-warning;
   }
+
+  &--idle {
+    background: $color-text-secondary;
+  }
 }

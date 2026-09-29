@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/codeofmario/wiremap/internal/wiremap/config"
+	"github.com/codeofmario/wiremap/internal/wiremap/docker"
+	"github.com/codeofmario/wiremap/internal/wiremap/kube"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,11 +15,15 @@ type App struct {
 	settings *config.Settings
 }
 
-func NewApp(router *gin.Engine, settings *config.Settings) *App {
+func NewApp(router *gin.Engine, settings *config.Settings, dockerPool *docker.ClientPool, clusterPool *kube.ClusterPool) (*App, error) {
+	if dockerPool.Connected() == 0 && clusterPool.Connected() == 0 {
+		return nil, fmt.Errorf("no Docker hosts or Kubernetes clusters could be connected")
+	}
+
 	return &App{
 		router:   router,
 		settings: settings,
-	}
+	}, nil
 }
 
 func (a *App) Run() error {

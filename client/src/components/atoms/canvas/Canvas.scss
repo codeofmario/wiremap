@@ -19,6 +19,19 @@
     }
   }
 
+  .graph-node {
+    &:hover .graph-node__shape {
+      stroke-width: 3;
+      filter: drop-shadow(0 0 8px rgba($color-accent, 0.4));
+    }
+
+    &--selected .graph-node__shape {
+      stroke: $color-accent;
+      stroke-width: 3;
+      filter: drop-shadow(0 0 10px rgba($color-accent, 0.6));
+    }
+  }
+
   &__tooltip {
     display: none;
     position: fixed;

@@ -1,0 +1,26 @@
+@use '../../../styles/variables' as *;
+
+.key-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  white-space: nowrap;
+  font-size: 11px;
+
+  &__key {
+    min-width: 18px;
+    padding: 1px 5px;
+    border: 1px solid $color-border;
+    border-bottom-width: 2px;
+    border-radius: $radius-sm;
+    background: $color-bg-tertiary;
+    color: $color-accent-hover;
+    font-family: $font-mono;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  &__label {
+    color: $color-text-secondary;
+  }
+}

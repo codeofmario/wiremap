@@ -1,7 +1,7 @@
 export PATH := $(HOME)/sdk/go1.25.8/bin:$(HOME)/go/bin:$(HOME)/gopath/bin:$(PATH)
 export GOPATH := $(HOME)/gopath
 
-.PHONY: dev dev-backend dev-frontend build build-frontend build-backend wire install clean
+.PHONY: dev dev-backend dev-frontend build build-frontend build-backend wire install clean test
 
 # Development - run both backend and frontend with hot reload
 dev: install
@@ -26,6 +26,12 @@ build-frontend:
 
 build-backend:
 	go build -o bin/wiremap ./cmd/wiremap
+
+# Unit tests: Go backend and frontend
+test:
+	go vet ./...
+	go test ./...
+	cd client && npm test
 
 # Wire dependency injection
 wire:

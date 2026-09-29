@@ -7,12 +7,14 @@ class WireSocket {
   private reconnectDelay = 3000;
   private intentionalClose = false;
 
+  constructor(private readonly path: string) {}
+
   connect() {
     if (this.ws?.readyState === WebSocket.OPEN || this.ws?.readyState === WebSocket.CONNECTING) return;
 
     this.intentionalClose = false;
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const url = `${protocol}//${location.host}/ws`;
+    const url = `${protocol}//${location.host}${this.path}`;
 
     try {
       this.ws = new WebSocket(url);
@@ -95,10 +97,18 @@ class WireSocket {
 }
 
 let instance: WireSocket | null = null;
+let kubeInstance: WireSocket | null = null;
 
 export const getSocket = (): WireSocket => {
   if (!instance) {
-    instance = new WireSocket();
+    instance = new WireSocket('/ws');
   }
   return instance;
+};
+
+export const getKubeSocket = (): WireSocket => {
+  if (!kubeInstance) {
+    kubeInstance = new WireSocket('/ws/k8s');
+  }
+  return kubeInstance;
 };

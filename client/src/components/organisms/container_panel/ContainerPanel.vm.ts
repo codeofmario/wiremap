@@ -41,5 +41,6 @@ export const useContainerPanel = ({ host, containerId }: ContainerPanelProps) =>
     inspect,
     inspectLoading,
     containerName: inspect?.name?.replace(/^\//, '') || containerId.slice(0, 12),
+    execPath: `/ws/exec/${containerId}${host ? `?host=${encodeURIComponent(host)}` : ''}`,
   };
 };

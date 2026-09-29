@@ -1,7 +1,8 @@
 import { useRef, useEffect } from 'react';
+import { basicSetup } from 'codemirror';
 import { EditorState } from '@codemirror/state';
 import { EditorView, keymap } from '@codemirror/view';
-import { defaultKeymap } from '@codemirror/commands';
+import { indentWithTab } from '@codemirror/commands';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { json } from '@codemirror/lang-json';
 import { javascript } from '@codemirror/lang-javascript';
@@ -14,7 +15,8 @@ import { sql } from '@codemirror/lang-sql';
 
 export interface CodeEditorProps {
   value: string;
-  onChange: (value: string) => void;
+  /** Not needed when readOnly */
+  onChange?: (value: string) => void;
   language?: string;
   readOnly?: boolean;
   className?: string;
@@ -54,11 +56,12 @@ export const useCodeEditor = ({ value, onChange, language, readOnly = false, cla
     if (!editorRef.current) return;
 
     const extensions = [
-      keymap.of(defaultKeymap),
+      basicSetup,
+      keymap.of([indentWithTab]),
       oneDark,
       EditorView.updateListener.of((update) => {
         if (update.docChanged) {
-          onChange(update.state.doc.toString());
+          onChange?.(update.state.doc.toString());
         }
       }),
     ];
@@ -69,7 +72,7 @@ export const useCodeEditor = ({ value, onChange, language, readOnly = false, cla
     }
 
     if (readOnly) {
-      extensions.push(EditorState.readOnly.of(true));
+      extensions.push(EditorState.readOnly.of(true), EditorView.editable.of(false));
     }
 
     const state = EditorState.create({

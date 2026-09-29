@@ -24,6 +24,10 @@ func BadRequest(msg string) *AppError {
 	return &AppError{StatusCode: http.StatusBadRequest, Message: msg}
 }
 
+func Forbidden(msg string) *AppError {
+	return &AppError{StatusCode: http.StatusForbidden, Message: msg}
+}
+
 func Internal(msg string) *AppError {
 	return &AppError{StatusCode: http.StatusInternalServerError, Message: msg}
 }

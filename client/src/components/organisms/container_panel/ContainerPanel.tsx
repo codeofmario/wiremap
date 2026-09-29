@@ -19,7 +19,7 @@ export const ContainerPanel = (props: ContainerPanelProps) => {
     logs, clearLogs,
     currentStats, statsHistory,
     inspect, inspectLoading,
-    containerName,
+    containerName, execPath,
   } = useContainerPanel(props);
 
   return (
@@ -45,7 +45,7 @@ export const ContainerPanel = (props: ContainerPanelProps) => {
             <StatsChart current={currentStats} history={statsHistory} />
           )}
           {activeTab === 'console' && (
-            <ConsoleView host={props.host} containerId={props.containerId} />
+            <ConsoleView execPath={execPath} />
           )}
           {activeTab === 'inspect' && inspect && !inspectLoading && (
             <InspectView inspect={inspect} host={props.host} containerId={props.containerId} onContainerIdChange={props.onContainerIdChange} />

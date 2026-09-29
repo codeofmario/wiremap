@@ -1,0 +1,19 @@
+# Custom resources for the FeatureFlag CRD in demo-app.yaml (apply after it)
+apiVersion: demo.wiremap.io/v1
+kind: FeatureFlag
+metadata:
+  name: new-checkout
+  namespace: shop
+spec:
+  enabled: true
+  rollout: 25
+status:
+  phase: Active
+---
+apiVersion: demo.wiremap.io/v1
+kind: FeatureFlag
+metadata:
+  name: dark-mode
+  namespace: shop
+spec:
+  enabled: false

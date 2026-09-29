@@ -1,5 +1,6 @@
 export interface HostInfo {
   name: string;
+  connected: boolean;
 }
 
 export interface ContainerInfo {

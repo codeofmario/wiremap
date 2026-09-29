@@ -1,14 +1,14 @@
 package dto
 
 type ContainerListItem struct {
-	ID       string            `json:"id"`
-	Names    []string          `json:"names"`
-	Image    string            `json:"image"`
-	State    string            `json:"state"`
-	Status   string            `json:"status"`
-	Created  int64             `json:"created"`
-	Ports    []PortMappingDto  `json:"ports"`
-	Labels   map[string]string `json:"labels"`
+	ID       string                       `json:"id"`
+	Names    []string                     `json:"names"`
+	Image    string                       `json:"image"`
+	State    string                       `json:"state"`
+	Status   string                       `json:"status"`
+	Created  int64                        `json:"created"`
+	Ports    []PortMappingDto             `json:"ports"`
+	Labels   map[string]string            `json:"labels"`
 	Networks map[string]NetworkAttachment `json:"networks"`
 }
 
@@ -28,19 +28,19 @@ type NetworkAttachment struct {
 }
 
 type ContainerInspectDto struct {
-	ID              string                      `json:"id"`
-	Name            string                      `json:"name"`
-	State           ContainerStateDto           `json:"state"`
-	Image           string                      `json:"image"`
-	Command         string                      `json:"command"`
-	Entrypoint      []string                    `json:"entrypoint"`
-	Env             []string                    `json:"env"`
-	Labels          map[string]string           `json:"labels"`
-	RestartPolicy   string                      `json:"restartPolicy"`
-	Mounts          []MountDto                  `json:"mounts"`
-	PortBindings    map[string][]HostBinding    `json:"portBindings"`
-	Networks        map[string]NetworkAttachment `json:"networks"`
-	Created         string                      `json:"created"`
+	ID            string                       `json:"id"`
+	Name          string                       `json:"name"`
+	State         ContainerStateDto            `json:"state"`
+	Image         string                       `json:"image"`
+	Command       string                       `json:"command"`
+	Entrypoint    []string                     `json:"entrypoint"`
+	Env           []string                     `json:"env"`
+	Labels        map[string]string            `json:"labels"`
+	RestartPolicy string                       `json:"restartPolicy"`
+	Mounts        []MountDto                   `json:"mounts"`
+	PortBindings  map[string][]HostBinding     `json:"portBindings"`
+	Networks      map[string]NetworkAttachment `json:"networks"`
+	Created       string                       `json:"created"`
 }
 
 type ContainerStateDto struct {

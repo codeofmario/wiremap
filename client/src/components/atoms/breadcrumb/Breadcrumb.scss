@@ -1,0 +1,40 @@
+@use '../../../styles/variables' as *;
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  min-width: 0;
+  font-family: $font-family;
+  font-size: 13px;
+
+  &__separator {
+    color: $color-text-secondary;
+  }
+
+  &__item {
+    padding: 2px $spacing-xs;
+    background: none;
+    border: none;
+    border-radius: $radius-sm;
+    color: $color-text-secondary;
+    font: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 240px;
+    cursor: pointer;
+    transition: all $transition;
+
+    &:hover:not(:disabled) {
+      color: $color-text;
+      background: $color-bg-tertiary;
+    }
+
+    &--current {
+      color: $color-text;
+      font-weight: 600;
+      cursor: default;
+    }
+  }
+}

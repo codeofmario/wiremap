@@ -7,7 +7,7 @@ export const MainLayout = (props: MainLayoutProps) => {
 
   return (
     <Stack direction="column" fullHeight gap="none" className={className}>
-      <Header title="Wiremap" subtitle="Docker Network Explorer" />
+      <Header title="Wiremap" subtitle="Docker & Kubernetes Explorer" />
       <Stack flex="1" direction="column" gap="none" padding="none">
         {children}
       </Stack>

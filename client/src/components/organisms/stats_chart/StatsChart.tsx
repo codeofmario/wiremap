@@ -9,7 +9,7 @@ import { ScrollArea } from '../../atoms/scroll_area/ScrollArea';
 import { Canvas } from '../../atoms/canvas/Canvas';
 
 export const StatsChart = (props: StatsChartProps) => {
-  const { current, history } = useStatsChart(props);
+  const { current, history, showNetwork } = useStatsChart(props);
   const cpuRef = useRef<SVGSVGElement>(null);
   const memRef = useRef<SVGSVGElement>(null);
 
@@ -33,8 +33,8 @@ export const StatsChart = (props: StatsChartProps) => {
         <Stack direction="row" gap="sm">
           <StatCard label="CPU" value={`${current.cpuPercent}`} unit="%" />
           <StatCard label="Memory" value={formatBytes(current.memoryUsage)} unit={`/ ${formatBytes(current.memoryLimit)}`} />
-          <StatCard label="Net RX" value={formatBytes(current.networkRx)} />
-          <StatCard label="Net TX" value={formatBytes(current.networkTx)} />
+          {showNetwork && <StatCard label="Net RX" value={formatBytes(current.networkRx)} />}
+          {showNetwork && <StatCard label="Net TX" value={formatBytes(current.networkTx)} />}
         </Stack>
         <Stack gap="md">
           <Panel variant="bordered" padding="sm">

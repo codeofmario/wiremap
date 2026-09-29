@@ -27,7 +27,7 @@ type ClientPool struct {
 	mu      sync.RWMutex
 }
 
-func NewClientPool(settings *config.Settings) (*ClientPool, error) {
+func NewClientPool(settings *config.Settings) *ClientPool {
 	pool := &ClientPool{
 		clients: make(map[string]*client.Client),
 		hosts:   settings.Hosts,
@@ -62,11 +62,21 @@ func NewClientPool(settings *config.Settings) (*ClientPool, error) {
 		fmt.Fprintf(os.Stderr, "  ✗ failed:    %s\n", h)
 	}
 
-	if len(pool.clients) == 0 {
-		return nil, fmt.Errorf("no Docker hosts could be connected")
-	}
+	return pool
+}
 
-	return pool, nil
+// Connected reports how many Docker hosts connected at startup.
+func (p *ClientPool) Connected() int {
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+	return len(p.clients)
+}
+
+func (p *ClientPool) IsConnected(hostID string) bool {
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+	_, ok := p.clients[hostID]
+	return ok
 }
 
 func (p *ClientPool) Get(hostID string) (*client.Client, error) {

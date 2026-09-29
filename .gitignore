@@ -10,6 +10,6 @@ coverage/
 .claude/
 CLAUDE.md
 wiremap.yml
-wiremap
+/wiremap
 .air.toml
 *.tsbuildinfo
