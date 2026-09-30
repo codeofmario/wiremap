@@ -1,0 +1,20 @@
+name: Feature request
+description: Suggest an idea for Wiremap
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem or workflow, not the solution yet.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would help?
+      description: How you imagine it working in Wiremap.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: How do you do it today?

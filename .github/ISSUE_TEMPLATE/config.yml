@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://github.com/codeofmario/wiremap/tree/main/docs
+    about: Configuration, API and development guides

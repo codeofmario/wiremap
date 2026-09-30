@@ -2,19 +2,25 @@
 
 See your Docker containers and Kubernetes clusters as a live map — in your browser, from a single binary.
 
+[![CI](https://github.com/codeofmario/wiremap/actions/workflows/ci.yml/badge.svg)](https://github.com/codeofmario/wiremap/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/codeofmario/wiremap)](https://github.com/codeofmario/wiremap/releases/latest)
+[![Docker Pulls](https://img.shields.io/docker/pulls/codeofmario/wiremap)](https://hub.docker.com/r/codeofmario/wiremap)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Go](https://img.shields.io/badge/Go-1.25+-00ADD8?logo=go&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 
 <p align="center">
-  <img src="docs/assets/screenshot-docker.png" alt="Docker view: containers grouped by network, with a container's live logs in the side panel" width="900" />
-  <br /><em>Docker — containers grouped by network</em>
+  <img src="docs/assets/demo.gif" alt="Demo: from the cluster overview into the shop namespace, then a Deployment, its Pods and a Pod's live logs — all with the keyboard" width="900" />
 </p>
 
-<p align="center">
-  <img src="docs/assets/screenshot-k8s.png" alt="Kubernetes view: sidebar of resource kinds with counts, a Service and its pods on the map, pod logs in the side panel" width="900" />
-  <br /><em>Kubernetes — a Service and its pods, with live logs</em>
-</p>
+## Why Wiremap?
+
+- **One binary, nothing to install in your cluster.** No agents, no sidecars, no database. Point it at a Docker socket or a kubeconfig and open your browser.
+- **Docker and Kubernetes in one place.** Local containers, remote Docker hosts over TCP, TLS or SSH, and as many Kubernetes clusters as you like, one click apart.
+- **A map, not a list.** See which containers share a network, which Pods sit behind a Service, what runs on each Node — and drill down with a double-click.
+- **Live.** The map, logs and metrics update as things change. No refresh button.
+- **Act where you look.** Logs, shell, files, YAML, scale, restart, cordon and drain — right from the side panel.
+- **Only what you're allowed.** Wiremap uses your kubeconfig's permissions, so a read-only user gets a read-only map.
 
 ## Install
 
@@ -58,6 +64,11 @@ cd wiremap && make build && ./bin/wiremap
 
 ## Docker
 
+<p align="center">
+  <img src="docs/assets/screenshot-docker.png" alt="Docker view: containers grouped by network, with a container's live logs in the side panel" width="900" />
+  <br /><em>Docker — containers grouped by network</em>
+</p>
+
 Wiremap connects to your local Docker automatically. For each container you can:
 
 - see it on a map, grouped by network
@@ -73,6 +84,11 @@ wiremap --host unix:///var/run/docker.sock --host tcp://prod:2375
 ```
 
 ## Kubernetes
+
+<p align="center">
+  <img src="docs/assets/screenshot-k8s.png" alt="Kubernetes view: sidebar of resource kinds with counts, a Service and its pods on the map, pod logs in the side panel" width="900" />
+  <br /><em>Kubernetes — a Service and its pods, with live logs</em>
+</p>
 
 Give Wiremap a kubeconfig, then pick the cluster in the top bar:
 
@@ -134,6 +150,7 @@ Everything can be set with flags or a `wiremap.yml` file — Docker hosts, TLS, 
 - [Configuration](docs/configuration.md) — Docker hosts, Kubernetes clusters, permissions, flags
 - [API](docs/api.md) — REST and WebSocket reference
 - [Development](docs/development.md) — build, test and contribute
+- [Contributing](CONTRIBUTING.md) — report bugs, suggest features, open a pull request
 
 ## License
 
